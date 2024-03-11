@@ -26,11 +26,17 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
+                                <a class="nav-link text-dark ms-auto p-0 me-3" asp-area="" asp-controller="Prodotto" asp-action="index">Gestisci Prodotti</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link text-dark ms-auto p-0" asp-area="" asp-controller="Login" asp-action="Logout">Logout</a>
                             </li>
                         }
                         else
                         {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark ms-auto" asp-area="" asp-controller="Login" asp-action="SignUp">SignUp</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark ms-auto" asp-area="" asp-controller="Login" asp-action="index">Login</a>
                             </li>

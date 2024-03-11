@@ -22,11 +22,13 @@ namespace Pizzeria.Controllers
             _authenticationSchemeProvider = authenticationSchemeProvider;
         }
 
+        // Get /Login/Index
         public IActionResult Index()
         {
             return View();
         }
 
+        // Post /Login/Index
         [HttpPost]
         public async Task<IActionResult> Index([Bind("Username,Password")] Utente model)
         {
@@ -71,6 +73,7 @@ namespace Pizzeria.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        // Get /Login/Logout
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -78,6 +81,40 @@ namespace Pizzeria.Controllers
             TempData["success"] = "Sei stato disconnesso";
 
             return RedirectToAction("Index", "Home");
+        }
+
+        // Get /Login/SignUp
+        public async Task<IActionResult> SignUp()
+        {
+            return View();
+        }
+
+        // Post /Login/SignUp
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SignUp([Bind("Username,Password")] Utente model)
+        {
+            ModelState.Remove("Ordini");
+            if (!ModelState.IsValid)
+            {
+                TempData["error"] = "Errore nei dati inseriti";
+                return View();
+            }
+
+            var user = await _db.Utenti.FirstOrDefaultAsync(u => u.Username == model.Username);
+
+            if (user != null)
+            {
+                TempData["error"] = "Username già esistente";
+                return View();
+            }
+
+            _db.Utenti.Add(model);
+            await _db.SaveChangesAsync();
+
+            TempData["success"] = "Registrazione effettuata con successo";
+
+            return RedirectToAction("Index");
         }
     }
 }
