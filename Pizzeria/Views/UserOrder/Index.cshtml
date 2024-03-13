@@ -1,0 +1,145 @@
+﻿@using Newtonsoft.Json;
+@model IEnumerable<Pizzeria.Models.CartItem>
+@{
+    ViewData["Title"] = "User Order";
+
+
+}
+<main>
+    <div class="container mb-5">
+        <div class="row">
+            <div class="col-12">
+                <h2>Menù</h2>
+                <hr />
+                <div id="listaProdotti" class="d-flex g-5 flex-wrap">
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <h2>Carrello</h2>
+    <hr />
+    <div class="container">
+        <div class="row">
+            <div class="col-12 d-flex flex-wrap">
+
+                <hr />
+                @{
+                    if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <div class="card me-3">
+                                <img src="@item.ImgProdotto" class="img-fix card-img-top" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title
+                                                                                                                ">
+                                        @item.NomeProdotto
+                                    </h5>
+                                    <p class="card-text">@item.PrezzoProdotto €</p>
+                                    <p class="card-text">Quantità: @item.Quantita </p>
+
+                                    @foreach (var itemmino in item.IngredienteItem)
+                                    {
+                                        <p class="card-text">@itemmino.NomeIngrediente</p>
+                                    }
+
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>Il carrello è vuoto</p>
+                    }
+
+                }
+
+
+            </div>
+
+        </div>
+    </div>
+</main>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            async function FetchListaProdotti() {
+
+                const response = await fetch('UserOrder/FetchListaProdotti');
+                const data = await response.json();
+                console.log(data);
+
+                $('#listaProdotti').empty(); // Clear the existing content
+
+                data.forEach(product => {
+                    const card = $('<div>').addClass('card me-3');
+
+                    const img = $('<img>').attr('src', product.imgProdotto).addClass('img-fix card-img-top').attr('alt', '...');
+                    card.append(img);
+
+                    const cardBody = $('<div>').addClass('card-body');
+                    card.append(cardBody);
+
+                    const title = $('<h5>').addClass('card-title').text(product.nomeProdotto);
+                    cardBody.append(title);
+
+                    const deliveryTime = $('<p>').addClass('card-text').text(product.tempoConsegna + ' minuti');
+                    cardBody.append(deliveryTime);
+
+                    const price = $('<p>').addClass('card-text').text(product.prezzoProdotto + ' €');
+                    cardBody.append(price);
+
+                    const buttonAdd = $('<button>').addClass('btn btn-primary').text('Add to cart');
+                    const buttonRemove = $('<button>').addClass('btn btn-danger').text('Remove ');
+
+                    buttonAdd.on('click', async function () {
+                        FetchAddToCartSession(product);
+                    });
+                    buttonRemove.on('click', async function () {
+                        FetchRemoveFromCartSession(product.idProdotto);
+                    });
+
+                    cardBody.append(buttonAdd);
+                    cardBody.append(buttonRemove);
+
+                    $('#listaProdotti').append(card);
+                });
+            }
+            FetchListaProdotti();
+
+            async function FetchAddToCartSession(product) {
+                try {
+                    const response = await fetch('UserOrder/FetchAddToCartSession/' + product.idProdotto);
+                    const data = await response.json();
+                    console.log(data);
+                    location.reload();
+                }
+                catch (error) {
+                    console.log(error);
+                }
+
+            }
+
+
+            async function FetchRemoveFromCartSession(idProdotto) {
+                try {
+                    const response = await fetch('UserOrder/FetchRemoveFromCartSession/' + idProdotto);
+                    const data = await response.json();
+                    console.log(data);
+                    location.reload();
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+
+        });
+    </script>
+
+}

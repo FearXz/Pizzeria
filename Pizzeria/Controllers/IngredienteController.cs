@@ -5,22 +5,22 @@ using Pizzeria.Models;
 
 namespace Pizzeria.Controllers
 {
-    public class ProdottoController : Controller
+    public class IngredienteController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ProdottoController(ApplicationDbContext context)
+        public IngredienteController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Prodotto
+        // GET: Ingrediente
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Prodotti.ToListAsync());
+            return View(await _context.Ingrediente.ToListAsync());
         }
 
-        // GET: Prodotto/Details/5
+        // GET: Ingrediente/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -28,45 +28,43 @@ namespace Pizzeria.Controllers
                 return NotFound();
             }
 
-            var prodotto = await _context
-                .Prodotti.Include(p => p.IngredientiAggiunti)
-                .ThenInclude(i => i.Ingrediente)
-                .FirstOrDefaultAsync(m => m.IdProdotto == id);
-            if (prodotto == null)
+            var ingrediente = await _context.Ingrediente.FirstOrDefaultAsync(m =>
+                m.IdIngrediente == id
+            );
+            if (ingrediente == null)
             {
                 return NotFound();
             }
 
-            return View(prodotto);
+            return View(ingrediente);
         }
 
-        // GET: Prodotto/Create
+        // GET: Ingrediente/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Prodotto/Create
+        // POST: Ingrediente/Create
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("NomeProdotto,ImgProdotto,PrezzoProdotto,TempoConsegna")] Prodotto prodotto
+            [Bind("NomeIngrediente,PrezzoIngrediente")] Ingrediente ingrediente
         )
         {
-            ModelState.Remove("Prodotto");
-            ModelState.Remove("Ingrediente");
+            ModelState.Remove("IngredientiAggiunti");
 
             if (ModelState.IsValid)
             {
-                _context.Add(prodotto);
+                _context.Add(ingrediente);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(prodotto);
+            return View(ingrediente);
         }
 
-        // GET: Prodotto/Edit/5
+        // GET: Ingrediente/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -74,42 +72,38 @@ namespace Pizzeria.Controllers
                 return NotFound();
             }
 
-            var prodotto = await _context.Prodotti.FindAsync(id);
-            if (prodotto == null)
+            var ingrediente = await _context.Ingrediente.FindAsync(id);
+            if (ingrediente == null)
             {
                 return NotFound();
             }
-            return View(prodotto);
+            return View(ingrediente);
         }
 
-        // POST: Prodotto/Edit/5
+        // POST: Ingrediente/Edit/5
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
             int id,
-            [Bind("IdProdotto,NomeProdotto,ImgProdotto,PrezzoProdotto,TempoConsegna")]
-                Prodotto prodotto
+            [Bind("IdIngrediente,NomeIngrediente,PrezzoIngrediente")] Ingrediente ingrediente
         )
         {
-            if (id != prodotto.IdProdotto)
+            if (id != ingrediente.IdIngrediente)
             {
                 return NotFound();
             }
-
-            ModelState.Remove("Prodotto");
-            ModelState.Remove("Ingrediente");
-
+            ModelState.Remove("IngredientiAggiunti");
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(prodotto);
+                    _context.Update(ingrediente);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProdottoExists(prodotto.IdProdotto))
+                    if (!IngredienteExists(ingrediente.IdIngrediente))
                     {
                         return NotFound();
                     }
@@ -120,10 +114,10 @@ namespace Pizzeria.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(prodotto);
+            return View(ingrediente);
         }
 
-        // GET: Prodotto/Delete/5
+        // GET: Ingrediente/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -131,33 +125,35 @@ namespace Pizzeria.Controllers
                 return NotFound();
             }
 
-            var prodotto = await _context.Prodotti.FirstOrDefaultAsync(m => m.IdProdotto == id);
-            if (prodotto == null)
+            var ingrediente = await _context.Ingrediente.FirstOrDefaultAsync(m =>
+                m.IdIngrediente == id
+            );
+            if (ingrediente == null)
             {
                 return NotFound();
             }
 
-            return View(prodotto);
+            return View(ingrediente);
         }
 
-        // POST: Prodotto/Delete/5
+        // POST: Ingrediente/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var prodotto = await _context.Prodotti.FindAsync(id);
-            if (prodotto != null)
+            var ingrediente = await _context.Ingrediente.FindAsync(id);
+            if (ingrediente != null)
             {
-                _context.Prodotti.Remove(prodotto);
+                _context.Ingrediente.Remove(ingrediente);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProdottoExists(int id)
+        private bool IngredienteExists(int id)
         {
-            return _context.Prodotti.Any(e => e.IdProdotto == id);
+            return _context.Ingrediente.Any(e => e.IdIngrediente == id);
         }
     }
 }

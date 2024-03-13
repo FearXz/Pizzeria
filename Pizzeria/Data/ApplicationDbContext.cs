@@ -11,6 +11,8 @@ namespace Pizzeria.Data
         public virtual DbSet<Prodotto> Prodotti { get; set; }
         public virtual DbSet<ProdottoAcquistato> ProdottiAcquistati { get; set; }
         public virtual DbSet<Ordine> Ordini { get; set; }
+        public DbSet<Pizzeria.Models.Ingrediente> Ingrediente { get; set; } = default!;
+        public DbSet<Pizzeria.Models.IngredienteAggiunto> IngredienteAggiunto { get; set; } = default!;
 
     }
 

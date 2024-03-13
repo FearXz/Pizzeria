@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Pizzeria.Models.IngredienteAggiunto>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IdIngredienteAggiunto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Prodotto.IdProdotto) 
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingrediente.NomeIngrediente)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdIngredienteAggiunto)
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Prodotto.IdProdotto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ingrediente.NomeIngrediente)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdIngredienteAggiunto">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IdIngredienteAggiunto">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdIngredienteAggiunto">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

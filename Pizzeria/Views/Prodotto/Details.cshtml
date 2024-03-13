@@ -10,35 +10,29 @@
     <h4>Prodotto</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.NomeProdotto)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.NomeProdotto)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ImgProdotto)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ImgProdotto)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.PrezzoProdotto)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.PrezzoProdotto)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.TempoConsegna)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.TempoConsegna)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ingredienti)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ingredienti)
         </dd>
     </dl>
 </div>
@@ -46,3 +40,28 @@
     <a asp-action="Edit" asp-route-id="@Model?.IdProdotto">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+<h3>Ingredienti</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.IngredientiAggiunti)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.IngredientiAggiunti)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Ingrediente.NomeIngrediente)
+                    </td>
+                    <td>
+                    <a asp-action="Delete" asp-controller="IngredienteAggiunto" asp-route-id="@item.IdIngredienteAggiunto">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
