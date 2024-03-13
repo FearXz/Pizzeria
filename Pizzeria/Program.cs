@@ -15,6 +15,7 @@ builder
     .AddCookie(options =>
     {
         options.LoginPath = "/Login";
+        options.AccessDeniedPath = "/Home/Index";
     });
 
 builder.Services.AddSession();

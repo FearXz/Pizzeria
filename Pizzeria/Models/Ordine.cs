@@ -16,7 +16,7 @@ namespace Pizzeria.Models
         public string IndirizzoDiConsegna { get; set; }
 
         [Required]
-        public DateTime DataOrdine { get; set; } = DateTime.Now;
+        public DateTime DataOrdine { get; set; }
 
         [Required]
         public bool IsEvaso { get; set; } = false;

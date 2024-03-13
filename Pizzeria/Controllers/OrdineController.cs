@@ -22,6 +22,19 @@ namespace Pizzeria.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        public async Task<IActionResult> ToggleIsEvaso(int id)
+        {
+            var ordine = await _context.Ordini.FindAsync(id);
+
+            if (ordine != null)
+            {
+                ordine.IsEvaso = !ordine.IsEvaso;
+                _context.Update(ordine);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
         // GET: Ordine/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -108,8 +121,9 @@ namespace Pizzeria.Controllers
             {
                 return NotFound();
             }
-            ModelState.Remove("Cliente");
+            ModelState.Remove("Utente");
             ModelState.Remove("ProdottiAcquistati");
+
             if (ModelState.IsValid)
             {
                 try
@@ -133,10 +147,10 @@ namespace Pizzeria.Controllers
             ViewData["IdUtente"] = new SelectList(
                 _context.Utenti,
                 "IdUtente",
-                "Password",
+                "Username",
                 ordine.IdUtente
             );
-            return View(ordine);
+            return View();
         }
 
         // GET: Ordine/Delete/5

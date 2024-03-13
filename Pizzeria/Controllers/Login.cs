@@ -54,6 +54,7 @@ namespace Pizzeria.Controllers
             {
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.Role, user.Role),
+                new Claim(ClaimTypes.NameIdentifier, user.IdUtente.ToString())
             };
 
             var claimsIdentity = new ClaimsIdentity(
