@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Pizzeria.Class;
 using Pizzeria.Data;
 using Pizzeria.Models;
 
 namespace Pizzeria.Controllers
 {
+    [Authorize(Roles = UserRole.ADMIN)]
     public class IngredienteController : Controller
     {
         private readonly ApplicationDbContext _context;

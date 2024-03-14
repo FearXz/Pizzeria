@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -15,6 +16,20 @@ namespace Pizzeria.Controllers
         public UserOrderController(ApplicationDbContext db)
         {
             _db = db;
+        }
+
+        public async Task<IActionResult> UserOrderHistory()
+        {
+            int id = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var ordini = await _db
+                .Ordini.Include(o => o.Utente)
+                .Include(o => o.ProdottiAcquistati)
+                .ThenInclude(p => p.Prodotto)
+                .Where(o => o.IdUtente == id)
+                .ToListAsync();
+
+            return View(ordini);
         }
 
         // GET: Ordine
