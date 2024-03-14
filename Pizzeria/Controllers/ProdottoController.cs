@@ -44,8 +44,12 @@ namespace Pizzeria.Controllers
         }
 
         // GET: Prodotto/Create
+        [HttpGet]
         public IActionResult Create()
         {
+            var listaIngredienti = _context.Ingrediente.ToList();
+            ViewBag.ListaIngredienti = listaIngredienti;
+
             return View();
         }
 
@@ -53,19 +57,35 @@ namespace Pizzeria.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(
-            [Bind("NomeProdotto,ImgProdotto,PrezzoProdotto,TempoConsegna")] Prodotto prodotto
-        )
+        public async Task<IActionResult> Create(Prodotto prodotto)
         {
-            ModelState.Remove("Prodotto");
-            ModelState.Remove("Ingrediente");
+            ModelState.Remove("ProdottiAcquistati");
+            ModelState.Remove("IngredientiAggiunti");
 
             if (ModelState.IsValid)
             {
-                _context.Add(prodotto);
+                _context.Prodotti.Add(prodotto);
                 await _context.SaveChangesAsync();
+
+                if (prodotto.IngredientiAggiuntiHidden != null)
+                {
+                    var listaIngredienti = prodotto.IngredientiAggiuntiHidden.Split(",");
+                    foreach (var ingrediente in listaIngredienti)
+                    {
+                        var ingredienteAggiunto = new IngredienteAggiunto
+                        {
+                            IdProdotto = prodotto.IdProdotto,
+                            IdIngrediente = int.Parse(ingrediente)
+                        };
+                        _context.IngredienteAggiunto.Add(ingredienteAggiunto);
+                    }
+                    await _context.SaveChangesAsync();
+                }
+
                 return RedirectToAction(nameof(Index));
             }
+            var lista = _context.Ingrediente.ToList();
+            ViewBag.ListaIngredienti = lista;
             return View(prodotto);
         }
 

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Pizzeria.Models
 {
@@ -18,6 +19,9 @@ namespace Pizzeria.Models
 
         [Required]
         public int TempoConsegna { get; set; }
+
+        [NotMapped]
+        public string IngredientiAggiuntiHidden { get; set; }
 
         public virtual ICollection<ProdottoAcquistato> ProdottiAcquistati { get; set; }
         public virtual ICollection<IngredienteAggiunto> IngredientiAggiunti { get; set; }
