@@ -25,7 +25,24 @@ namespace Pizzeria.Models
         public string Nota { get; set; } = "";
 
         [NotMapped]
-        public double PrezzoTotale { get; set; } = 0;
+        public double PrezzoTotale
+        {
+            get
+            {
+                if (ProdottiAcquistati == null)
+                {
+                    return 0;
+                }
+
+                double prezzoTotale = 0;
+                foreach (var prodotto in ProdottiAcquistati)
+                {
+                    prezzoTotale += prodotto.Prodotto.PrezzoProdotto;
+                }
+                return prezzoTotale;
+            }
+            set { }
+        }
 
         public virtual Utente Utente { get; set; }
         public virtual ICollection<ProdottoAcquistato> ProdottiAcquistati { get; set; }
