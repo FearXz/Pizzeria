@@ -44,3 +44,10 @@ body {
     width: 50px;
     object-fit: cover;
 }
+
+.toast-success {
+    background-color: #F0AD4E !important; /* Questo è un colore giallo */
+}
+#toast-container.toast-top-right {
+    top: 80px; /* Il valore predefinito è 12px, quindi aggiungiamo 100px */
+}
