@@ -30,6 +30,7 @@ namespace Pizzeria.Controllers
         }
 
         // Post /Login/Index
+        // nella pagina di login si inserisce username e password
         [HttpPost]
         public async Task<IActionResult> Index([Bind("Username,Password")] Utente model)
         {
@@ -40,7 +41,8 @@ namespace Pizzeria.Controllers
                 TempData["error"] = "Errore nei dati inseriti";
                 return View();
             }
-
+            // cerca l'utente nel database con username e password inseriti
+            // se non esiste, ritorna alla pagina di login con un messaggio di errore
             var user = await _db.Utenti.FirstOrDefaultAsync(u =>
                 u.Username == model.Username && u.Password == model.Password
             );
@@ -50,7 +52,8 @@ namespace Pizzeria.Controllers
                 TempData["error"] = "Account non esistente";
                 return View();
             }
-
+            // se l'utente esiste, crea un cookie di autenticazione
+            // con le informazioni dell'utente e lo reindirizza alla home
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Username),
@@ -76,6 +79,7 @@ namespace Pizzeria.Controllers
         }
 
         // Get /Login/Logout
+        // disconnette l'utente e lo reindirizza alla home
         [Authorize]
         public async Task<IActionResult> Logout()
         {
@@ -87,12 +91,15 @@ namespace Pizzeria.Controllers
         }
 
         // Get /Login/SignUp
+        // reindirizza alla pagina di registrazione
         public async Task<IActionResult> SignUp()
         {
             return View();
         }
 
         // Post /Login/SignUp
+        // nella pagina di registrazione si inserisce username e password
+        // se l'utente esiste già, ritorna alla pagina di registrazione con un messaggio di errore
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignUp([Bind("Username,Password")] Utente model)

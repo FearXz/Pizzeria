@@ -35,6 +35,7 @@ namespace Pizzeria.Controllers
             return View();
         }
 
+        //  FetchNumeroTotaleOrdiniEvasi calcola il numero totale di ordini evasi in una data specifica.
         [Authorize(Roles = UserRole.ADMIN)]
         [HttpPost]
         public async Task<IActionResult> FetchNumeroTotaleOrdiniEvasi(
@@ -53,6 +54,7 @@ namespace Pizzeria.Controllers
             return Json(numeroOrdiniEvasi);
         }
 
+        //  FetchTotaleIncassoInData calcola il totale dell'incasso in una data specifica.
         [Authorize(Roles = UserRole.ADMIN)]
         [HttpPost]
         public async Task<IActionResult> FetchTotaleIncassoInData(int giorno, int mese, int anno)

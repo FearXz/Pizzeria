@@ -67,26 +67,34 @@ namespace Pizzeria.Controllers
 
             if (ModelState.IsValid)
             {
+                // controlla se l'immagine è stata caricata
                 if (ImgProdotto != null && ImgProdotto.Length > 0)
                 {
+                    //  GetFileName restituisce il nome del file specificato nel percorso del file
                     var fileName = Path.GetFileName(ImgProdotto.FileName);
+                    // Path.Combine unisce i percorsi in un unico percorso
                     var path = Path.Combine(_hostEnvironment.WebRootPath, "Img", fileName);
-
+                    // FileStream fornisce un'interfaccia per la lettura e la scrittura di byte
+                    // FileMode.Create crea un nuovo file. Se il file esiste già, sovrascrive il file
                     using (var fileStream = new FileStream(path, FileMode.Create))
                     {
+                        //  CopyToAsync copia il file caricato nel percorso specificato
                         await ImgProdotto.CopyToAsync(fileStream);
                     }
 
                     // Salva il percorso relativo come stringa nel tuo modello
                     prodotto.ImgProdotto = Path.Combine("Img", fileName);
                 }
-
+                // aggiungi il prodotto al database
                 _context.Prodotti.Add(prodotto);
                 await _context.SaveChangesAsync();
 
                 if (prodotto.IngredientiAggiuntiHidden != null)
                 {
+                    // recupera la lista di ingredienti aggiunti dal campo nascosto
                     var listaIngredienti = prodotto.IngredientiAggiuntiHidden.Split(",");
+
+                    // aggiungi gli ingredienti aggiunti al database
                     foreach (var ingrediente in listaIngredienti)
                     {
                         var ingredienteAggiunto = new IngredienteAggiunto

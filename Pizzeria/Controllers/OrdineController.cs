@@ -22,7 +22,9 @@ namespace Pizzeria.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Ordini.Include(o => o.Utente);
-            return View(await applicationDbContext.ToListAsync());
+            var list = await applicationDbContext.ToListAsync();
+            list.Reverse();
+            return View(list);
         }
 
         public async Task<IActionResult> ToggleIsEvaso(int id)
