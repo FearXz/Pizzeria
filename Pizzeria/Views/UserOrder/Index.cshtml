@@ -18,7 +18,7 @@
 
                 </div>
                 <hr />
-                <div id="listaProdotti" class="d-flex g-5 flex-wrap">
+                <div id="listaProdotti" class="row">
                 </div>
 
             </div>
@@ -36,21 +36,24 @@
                     {
                         foreach (var item in Model)
                         {
-                            <div class="card me-3">
-                                <img src="@item.ImgProdotto" class="img-fix card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title
-                                                                                                                                            ">
-                                        @item.NomeProdotto
-                                    </h5>
-                                    <p class="card-text">@item.PrezzoProdotto €</p>
-                                    <p class="card-text">Quantità: @item.Quantita </p>
-
-                                    @foreach (var itemmino in item.IngredienteItem)
-                                    {
-                                        <p class="card-text">@itemmino.NomeIngrediente</p>
-                                    }
-
+                            <div class="col-6 mb-3">
+                                <div class="row bg-dark border border-1 rounded-2 " style="max-width:450px">
+                                    <div class="col-auto">
+                                        <img class=" fix-w-200 fix-h-120 cover my-3" src="@item.ImgProdotto" />
+                                    </div>
+                                    <div class="col-auto">
+                                        <h5 class="mb-3 mt-3">@item.NomeProdotto</h5>
+                                        <div class="">
+                                            <p class="fs-5">Quantità: @item.Quantita </p>
+                                            <p class="fs-5">Prezzo: @item.PrezzoProdotto €</p>
+                                        </div>
+                                    </div>
+                                    <div class="mb-1">
+                                        @foreach (var itemmino in item.IngredienteItem)
+                                        {
+                                            <span>@itemmino.NomeIngrediente,  </span>
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         }
@@ -59,9 +62,7 @@
                     {
                         <p>Il carrello è vuoto</p>
                     }
-
                 }
-
 
             </div>
 
@@ -85,37 +86,49 @@
                 $('#listaProdotti').empty(); // Clear the existing content
 
                 data.forEach(product => {
-                    const card = $('<div>').addClass('card me-3');
+                    const col = $('<div>').addClass('col-6 mb-3');
+                    // Creazione del div principale con classe "card" e stile "max-width: 450px;"
+                    const card = $('<div>').addClass('row bg-dark border border-1 rounded-2').css('max-width', '450px');
+                    col.append(card);
+                    // Colonna per l'immagine
+                    const imgCol = $('<div>').addClass('col-auto');
+                    card.append(imgCol);
 
-                    const img = $('<img>').attr('src', product.imgProdotto).addClass('img-fix card-img-top').attr('alt', '...');
-                    card.append(img);
+                    // Immagine
+                    const img = $('<img>').addClass('fix-w-200 fix-h-120 cover my-3').attr('src', product.imgProdotto);
+                    imgCol.append(img);
 
-                    const cardBody = $('<div>').addClass('card-body');
-                    card.append(cardBody);
+                    // Colonna per il testo e i bottoni
+                    const textAndButtonsCol = $('<div>').addClass('col-auto');
+                    card.append(textAndButtonsCol);
 
-                    const title = $('<h5>').addClass('card-title').text(product.nomeProdotto);
-                    cardBody.append(title);
+                    // Titolo della card
+                    const title = $('<h5>').addClass('mb-5 mt-3').text(product.nomeProdotto);
+                    textAndButtonsCol.append(title);
 
-                    const deliveryTime = $('<p>').addClass('card-text').text(product.tempoConsegna + ' minuti');
-                    cardBody.append(deliveryTime);
+                    // Div per i bottoni
+                    const buttonDiv = $('<div>').addClass('');
+                    textAndButtonsCol.append(buttonDiv);
 
-                    const price = $('<p>').addClass('card-text').text(product.prezzoProdotto + ' €');
-                    cardBody.append(price);
-
-                    const buttonAdd = $('<button>').addClass('btn btn-primary').text('Add to cart');
-                    const buttonRemove = $('<button>').addClass('btn btn-danger').text('Remove ');
-
-                    buttonAdd.on('click', async function () {
+                    // Bottone "Aggiungi"
+                    const addButton = $('<button>').addClass('btn btn-brown-200 me-3').text('Aggiungi');
+                    addButton.on('click', async function () {
                         FetchAddToCartSession(product);
                     });
-                    buttonRemove.on('click', async function () {
+                    buttonDiv.append(addButton);
+
+                    // Bottone "Rimuovi"
+                    const removeButton = $('<button>').addClass('btn btn-brown-200').text('Rimuovi');
+                    removeButton.on('click', async function () {
                         FetchRemoveFromCartSession(product.idProdotto);
                     });
+                    buttonDiv.append(removeButton);
 
-                    cardBody.append(buttonAdd);
-                    cardBody.append(buttonRemove);
+                    // Aggiunta della card al contenitore desiderato
+                    $('#listaProdotti').append(col);
 
-                    $('#listaProdotti').append(card);
+
+
                 });
             }
             FetchListaProdotti();
@@ -123,8 +136,7 @@
             async function FetchAddToCartSession(product) {
                 try {
                     const response = await fetch('UserOrder/FetchAddToCartSession/' + product.idProdotto);
-                    if (response.ok) 
-                    {
+                    if (response.ok) {
                         location.reload();
                     }
 

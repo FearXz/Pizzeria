@@ -11,10 +11,12 @@ namespace Pizzeria.Controllers
     public class ProdottoController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public ProdottoController(ApplicationDbContext context)
+        public ProdottoController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            _hostEnvironment = hostEnvironment;
         }
 
         // GET: Prodotto
@@ -57,13 +59,28 @@ namespace Pizzeria.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Prodotto prodotto)
+        public async Task<IActionResult> Create(Prodotto prodotto, IFormFile ImgProdotto)
         {
             ModelState.Remove("ProdottiAcquistati");
             ModelState.Remove("IngredientiAggiunti");
+            ModelState.Remove("ImgProdotto");
 
             if (ModelState.IsValid)
             {
+                if (ImgProdotto != null && ImgProdotto.Length > 0)
+                {
+                    var fileName = Path.GetFileName(ImgProdotto.FileName);
+                    var path = Path.Combine(_hostEnvironment.WebRootPath, "Img", fileName);
+
+                    using (var fileStream = new FileStream(path, FileMode.Create))
+                    {
+                        await ImgProdotto.CopyToAsync(fileStream);
+                    }
+
+                    // Salva il percorso relativo come stringa nel tuo modello
+                    prodotto.ImgProdotto = Path.Combine("Img", fileName);
+                }
+
                 _context.Prodotti.Add(prodotto);
                 await _context.SaveChangesAsync();
 

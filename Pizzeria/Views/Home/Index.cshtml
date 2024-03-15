@@ -2,7 +2,26 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center">
+            <img id="mainLogo" src="/img/Pizza-logo-design-template-Vector-PNG.png" />
+        </div>
+
+        <div class="col-12 text-center">
+            @if (User.Identity.IsAuthenticated)
+            {
+
+                <a class="btn btn-large btn-red-100 fs-1 fw-semibold" asp-area="" asp-controller="UserOrder" asp-action="index">Nuovo Ordine</a>
+
+
+            }
+            else
+            {
+                <a class="btn btn-large btn-red-100 fs-1 fw-semibold" asp-area="" asp-controller="Login" asp-action="SignUp">SignUp</a>
+
+                <a class="btn btn-large btn-red-100 fs-1 fw-semibold" asp-area="" asp-controller="Login" asp-action="index">Login</a>
+            }
+        </div>
+    </div>
 </div>

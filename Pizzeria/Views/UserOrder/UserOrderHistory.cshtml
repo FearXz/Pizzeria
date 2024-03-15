@@ -1,8 +1,6 @@
 ﻿@model IEnumerable<Pizzeria.Models.Ordine>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<h1>Storico Ordini</h1>
 <table class="table">
     <thead>
         <tr>
@@ -35,7 +33,7 @@
                 @Html.DisplayFor(modelItem => item.DataOrdine)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsEvaso)
+                @(item.IsEvaso ? "Evaso" : "Non Ancora Evaso")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Nota)

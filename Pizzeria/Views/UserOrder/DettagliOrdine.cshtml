@@ -3,65 +3,79 @@
 <div>
     <h4>Ordine</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IndirizzoDiConsegna)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IndirizzoDiConsegna)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DataOrdine)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DataOrdine)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nota)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nota)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PrezzoTotale) 
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PrezzoTotale) @Html.Raw("&euro;")
-        </dd>
-    </dl>
+    <div class="row">
+        <div class="col-6">
+            <div class="row">
+                <div class="col-12">
+                    <h5>Numero Ordine: @Html.DisplayFor(model => model.IdOrdine)</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="row">
+                <div class="col-12">
+                    <h5>Stato Ordine: @(Model.IsEvaso ? "Evaso" : "Non Ancora Evaso")</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="row">
+                <div class="col-12">
+                    <h5>Indirizzo Di Consegna: @Html.DisplayFor(model => model.IndirizzoDiConsegna)</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="row">
+                <div class="col-12">
+                    <h5>Data Ordine:  @Html.DisplayFor(model => model.DataOrdine)</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="row">
+                <div class="col-12">
+                    <h5>Note: @Html.DisplayFor(model => model.Nota)</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="row">
+                <div class="col-12">
+                    <h5>Prezzo Totale: @Html.DisplayFor(model => model.PrezzoTotale)</h5>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div>
-    <a asp-action="Index">Effettua un altro ordine</a>
+    <a asp-action="Index" class="btn btn-brown-100 mb-3 fs-5">Effettua un altro ordine</a>
 </div>
-<h4>Prodotti</h4>
+<h4>Prodotti Acquistati</h4>
 <hr />
-@foreach(var prodotti in Model.ProdottiAcquistati)
-{
-    <div>
+<div class="row">
 
-        <dl class="row">
-            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(modelItem => prodotti.Prodotto.NomeProdotto)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(modelItem => prodotti.Prodotto.NomeProdotto)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(modelItem => prodotti.Quantita)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(modelItem => prodotti.Quantita)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(modelItem => prodotti.Prodotto.PrezzoProdotto)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(modelItem => prodotti.Prodotto.PrezzoProdotto) @Html.Raw("&euro;")
-            </dd>
-        </dl>
-    </div>
-}
 
+    @foreach (var prodotti in Model.ProdottiAcquistati)
+    {
+        <div class="col-6 mb-3">
+            <div class="row bg-dark border border-1 rounded-2 " style="max-width:450px">
+                <div class="col-auto">
+                    <img class=" fix-w-200 fix-h-120 cover my-3" src="@prodotti.Prodotto.ImgProdotto" />
+                </div>
+                <div class="col-auto">
+                    <h5 class="mb-3 mt-3">@prodotti.Prodotto.NomeProdotto</h5>
+                    <div class="">
+                        <p class="fs-5">Quantità: @prodotti.Quantita </p>
+                        <p class="fs-5">Prezzo: @prodotti.Prodotto.PrezzoProdotto €</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    }
+</div>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
