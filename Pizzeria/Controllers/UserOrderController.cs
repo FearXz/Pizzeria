@@ -242,14 +242,14 @@ namespace Pizzeria.Controllers
                 .ThenInclude(i => i.Ingrediente)
                 .FirstOrDefaultAsync(m => m.IdOrdine == id);
 
-            var totale = 0.0;
+            //var totale = 0.0;
 
-            foreach (var prodotto in ordine.ProdottiAcquistati)
-            {
-                totale += prodotto.Prodotto.PrezzoProdotto * prodotto.Quantita;
-            }
+            //foreach (var prodotto in ordine.ProdottiAcquistati)
+            //{
+            //    totale += prodotto.Prodotto.PrezzoProdotto * prodotto.Quantita;
+            //}
 
-            ordine.PrezzoTotale = totale;
+            //ordine.PrezzoTotale = totale;
 
             await _db.SaveChangesAsync();
 

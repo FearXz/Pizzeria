@@ -48,7 +48,12 @@ namespace Pizzeria.Controllers
 
             var ordine = await _context
                 .Ordini.Include(o => o.Utente)
+                .Include(o => o.ProdottiAcquistati)
+                .ThenInclude(p => p.Prodotto)
+                .ThenInclude(p => p.IngredientiAggiunti)
+                .ThenInclude(i => i.Ingrediente)
                 .FirstOrDefaultAsync(m => m.IdOrdine == id);
+
             if (ordine == null)
             {
                 return NotFound();

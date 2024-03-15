@@ -46,10 +46,11 @@
                 @Html.DisplayFor(modelItem => item.Utente.Password)
             </td>
             <td>
-                <a asp-action="ToggleIsEvaso" class="btn btn-success" asp-route-id="@item.IdOrdine">ToggleIsEvaso</a> |
-                <a asp-action="Edit" asp-route-id="@item.IdOrdine">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdOrdine">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdOrdine">Delete</a>
+                <a asp-action="ToggleIsEvaso" class="btn btn-teal-800" asp-route-id="@item.IdOrdine">ToggleIsEvaso</a> 
+                <a asp-action="Details" class="btn btn-success" asp-route-id="@item.IdOrdine">Details</a>
+
+                <a asp-action="Edit" class="text-white" asp-route-id="@item.IdOrdine">Edit</a> |
+                <a asp-action="Delete" class="text-white" asp-route-id="@item.IdOrdine">Delete</a>
             </td>
         </tr>
 }
